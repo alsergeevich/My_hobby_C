@@ -1,22 +1,5 @@
-/*
-Инициализации +
-Добавления элементов +
-Удаления элементов
-Получения элемента по индексу +
-*/
+#include "vector.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-typedef struct vector {
-    size_t size_element;
-    void*  data;
-    size_t size_vector;
-    size_t capacity;
-    size_t error; //устанавливается в 1 при ошибке и 0 если всё ок
-
-} vector_t;
 
 //инициализация вектора 1-параметр указатель на структуру vector_t, 2-размер элемента(передаётся как sizeof(тип)) 3-ёмкость вектора
 void vector_init(vector_t* vector, size_t element_size, size_t capacity) {
@@ -201,39 +184,30 @@ void vector_insert(vector_t* vector, size_t index, void* element) {
     free(temp_r);
 }
 
-int main () {
-    vector_t vector;
-    vector_init(&vector, sizeof(int), 12);
-    for(int i = 0; i < 10; i++) {
-        int* num = malloc(sizeof(int));
-        *num = i;
-        vector_push_back(&vector, num);
+//удаляет элемент по индексу
+void vector_delete(vector_t* vector, size_t index) {
+    if (vector == NULL) {
+        return;
     }
-    printf("%d\n", vector_size(&vector));
-    printf("%d\n", vector_capacity(&vector));
-    printf("Element 5 :%d\n", *(int*)get_element_by_index(&vector, 5));
-    printf("Element 2 :%d\n", *(int*)get_element_by_index(&vector, 2));
-    printf("pop_back :%d\n", *(int*)vector_pop_back(&vector));
-    printf("%d\n", vector_size(&vector));
-    if (vector_is_empty(&vector)) {
-        printf("empty\n");
-    } else {
-        printf("not empty\n");
+    if (index >= vector->size_vector) {
+        vector->error = 1;
+        return;
     }
-    printf("%d\n", vector_capacity(&vector));
-    vector_reserve(&vector, 20);
-    printf("%d\n", vector_capacity(&vector));
-    vector_clear(&vector);
-    if (vector_is_empty(&vector))
+    vector->error = 0;
+    if(index == vector->size_vector - 1) {
+        vector_pop_back(vector);
+    }
+
+    void *temp_r = malloc((vector->size_vector - (index + 1)) * vector->size_element);
+    if (temp_r == NULL)
     {
-        printf("empty\n");
+        vector->error = 1;
+        return;
     }
-    else
-    {
-        printf("not empty\n");
-    }
-    for(int i = 0; i < vector_size(&vector); i++) {
-        free(get_element_by_index(&vector, i));
-    }
-    vector_free(&vector);
+    memcpy(temp_r, (char *)vector->data + (index + 1) * vector->size_element, (vector->size_vector - (index + 1)) * vector->size_element);
+    vector->size_vector--;
+    memcpy((char*)vector->data + (index * vector->size_element), temp_r, (vector->size_vector - index) * vector->size_element);
+    free(temp_r);
 }
+
+
