@@ -1,54 +1,3 @@
-#pragma once
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-typedef struct vector
-{
-    size_t size_element;
-    void *data;
-    size_t size_vector;
-    size_t capacity;
-    size_t error; // устанавливается в 1 при ошибке и 0 если всё ок
-
-} vector_t;
-
-// инициализация вектора 1-параметр указатель на структуру vector_t, 2-размер элемента(передаётся как sizeof(тип)) 3-ёмкость вектора
-void vector_init(vector_t *vector, size_t element_size, size_t capacity);
-
-// добавляет элемент в конец вектора
-void vector_push_back(vector_t *vector, void *element);
-
-// получение элемента по индексу
-void *get_element_by_index(vector_t *vector, size_t index);
-
-// возвращает последний элемент и удаляет его
-void *vector_pop_back(vector_t *vector);
-
-// освобождает память после использования вектора
-void vector_free(vector_t *vector);
-
-// возвращает текущий размер вектора (аналог std::vector.size())
-size_t vector_size(vector_t *vector);
-
-// возвращает текущую емкость вектора
-size_t vector_capacity(vector_t *vector);
-
-// проверяет, пустой ли вектор
-size_t vector_is_empty(vector_t *vector);
-
-// резервирует определенную емкость
-void vector_reserve(vector_t *vector, size_t capacity);
-
-// очищает содержимое вектора без освобождения самой структуры
-void vector_clear(vector_t *vector);
-
-// вставка элемента в произвольную позицию
-void vector_insert(vector_t *vector, size_t index, void *element);
-
-// удаляет элемент по индексу
-void vector_delete(vector_t *vector, size_t index);
-
 /*########################################################################################################*/
 /*
 
@@ -56,7 +5,7 @@ gcc -o main main.c vector.c
 
 int main () {
     vector_t vector;                                                                                    создаём вектор
-    int num;                                                                                            создаём переменную через которую будем заполнять вектор
+    int num; создаём переменную через которую будем заполнять вектор
     vector_init(&vector, sizeof(int), 12);                                                              инициализируем вектор, вектор будет содержать элементы типа int, начальная ёмкость вектора 12 элементов
     for(int i = 0; i < 10; i++) {                                                                       заполняем вектор элементами
         num = i;

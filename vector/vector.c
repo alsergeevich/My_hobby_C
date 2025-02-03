@@ -11,13 +11,14 @@ void vector_init(vector_t* vector, size_t element_size, size_t capacity) {
         vector->error = 1;
         return;
     }
-    vector->error = 0;
+    
     vector->data = calloc(capacity, element_size);
     if (vector->data == NULL)
     {   
         vector->error = 1;
         return;
     }
+    vector->error = 0;
     vector->size_vector = 0;
     vector->size_element = element_size;
     vector->capacity = capacity;
@@ -26,7 +27,7 @@ void vector_init(vector_t* vector, size_t element_size, size_t capacity) {
 //добавляет элемент в конец вектора
 void vector_push_back(vector_t* vector, void* element) {
 
-    if(vector == NULL || element == NULL) {
+    if(vector == NULL) {
         return;
     }
     vector->error = 0;
